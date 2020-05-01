@@ -31,11 +31,12 @@ for epoch = 1:params.max_epoch
         % Update weights
         condition =  current_label*dot(theta, current_sample); % y_hat %!!!
         if  (condition < 0) %!!!
-            error(epoch) = error(epoch) +  max(0, 1-dot(theta, current_sample)*current_label); %!!!
-            change_vec = params.alpha*current_label*current_sample; %!!!
+            error(epoch) = error(epoch) -1*condition; %!!!
+            change_vec = params.alpha*current_sample*current_label; %!!!
             theta =  theta + change_vec; %+2*params.lambda*theta; %!!!
         end
     end
+    error(epoch) = error(epoch) / num_samples;
     % to find the best theta
     if error(epoch) < best_error
       best_theta = theta;
