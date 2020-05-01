@@ -14,24 +14,24 @@ xlabel('learning epoch'); ylabel('train error');
 error = [];
 for epoch = 1:params.max_epoch
     fprintf('\nEpoch #%i: ', epoch)
-    
+
     % Arrange samples in random order for each learning epoch
     epoch_order = randperm(num_samples);
     % Initialize the error
     error(epoch) = 0;
-    
+
     % we will use stochastic gradient descent to train our model
     for iter = 1:num_samples
         % Get current sample
         sample_index = epoch_order(iter);
-        current_sample =    % COMPLETE CODE HERE
-        current_label =     % COMPLETE CODE HERE
+        current_sample =  data.X(iter, :);
+        current_label =  data.Y(iter);
         % Update weights
-        condition =  % COMPLETE CODE HERE 
-        if   % COMPLETE CODE HERE
-            error(epoch) =  % COMPLETE CODE HERE
-            change_vec= % COMPLETE CODE HERE
-            theta = % COMPLETE CODE HERE
+        condition =  sign(dot(theta, current_sample));
+        if  (condition ~= current_label)
+            error(epoch) =  max(0, 1-dot(theta, current_sample)*current_label);
+            change_vec = params.alpha*current_label*current_sample;
+            theta =  theta + change_vec;
         end
     end
     % Plot average error

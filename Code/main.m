@@ -14,6 +14,6 @@ precision = evaluate_model(prediction, data_train.Y);
 
 %% Test set
 % Predict
-prediction_test = predict_y(data_test.X, model.theta);         % COMPLETE CODE HERE
+prediction_test = predict_y(data_test.X, model.theta);         % COMPLETE CODE HERE קומפלטתי
 % evaluate
 precision_test = evaluate_model(prediction_test, data_test.Y);
