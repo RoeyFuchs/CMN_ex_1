@@ -10,5 +10,6 @@ function [settings, params] = load_settings_params()
     params.max_epoch = 500;
     params.convergence_window = 50;
     params.CV_k = 5;
+    params.lambda = 2;
 
 end

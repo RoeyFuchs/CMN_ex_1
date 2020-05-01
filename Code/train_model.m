@@ -6,6 +6,8 @@ rng(params.seed)
 % initialize W to random values
 
 theta =  rand(1,num_features);
+best_theta = theta;
+best_error = inf;
 
 %% SGD with hinge-loss
 figure(1)
@@ -29,11 +31,16 @@ for epoch = 1:params.max_epoch
         % Update weights
         condition =  sign(dot(theta, current_sample));
         if  (condition ~= current_label)
-            error(epoch) =  max(0, 1-dot(theta, current_sample)*current_label);
+            error(epoch) = error(epoch) +  max(0, 1-dot(theta, current_sample)*current_label);
             change_vec = params.alpha*current_label*current_sample;
-            theta =  theta + change_vec;
+            theta =  theta + change_vec; %+2*params.lambda*theta;
         end
     end
+    if error(epoch) < best_error
+      best_theta = theta;
+      best_error = error(epoch);
+    end
+    disp(best_error)
     % Plot average error
     if epoch>params.convergence_window
         plot(epoch, mean(error(epoch-params.convergence_window:epoch)), '.', 'MarkerSize', 10)
@@ -42,7 +49,7 @@ for epoch = 1:params.max_epoch
 
 end
 %% Output model
-model.theta = theta;
+model.theta = best_theta;
 model.training_error = error;
 model.num_of_epochs = epoch;
 end
