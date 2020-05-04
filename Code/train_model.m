@@ -31,10 +31,9 @@ for epoch = 1:params.max_epoch
         % Update weights
         condition =  current_label*dot(theta, current_sample); % y_hat * current_label
         if  (condition < 0) %
-            error(epoch) = error(epoch) -1*condition; %
-            change_vec = params.alpha*current_label*current_sample; %
-            %theta =  theta +( change_vec + (params.lambda*2*(theta)));
-            theta = (1-params.alpha*params.lambda)*theta + params.alpha*current_label*current_sample;
+            error(epoch) = error(epoch) -1*condition; 
+            change_vec = params.alpha*current_label*current_sample;
+            theta = theta -2*params.alpha*params.lambda*theta + change_vec;
         end
     end
     error(epoch) = (error(epoch) +sum(theta.^2)) / num_samples;
