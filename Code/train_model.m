@@ -33,7 +33,8 @@ for epoch = 1:params.max_epoch
         if  (condition < 0) %
             error(epoch) = error(epoch) -1*condition; %
             change_vec = params.alpha*current_label*current_sample; %
-            theta =  theta +( change_vec + (params.lambda*2*(theta)));
+            %theta =  theta +( change_vec + (params.lambda*2*(theta)));
+            theta = (1-params.alpha*params.lambda)*theta + params.alpha*current_label*current_sample;
         end
     end
     error(epoch) = (error(epoch) +sum(theta.^2)) / num_samples;
