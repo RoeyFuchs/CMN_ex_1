@@ -26,18 +26,18 @@ for epoch = 1:params.max_epoch
     for iter = 1:num_samples
         % Get current sample
         sample_index = epoch_order(iter);
-        current_sample =  data.X(iter, :); %!!!
-        current_label =  data.Y(iter); %!!!
+        current_sample =  data.X(iter, :); %
+        current_label =  data.Y(iter); %
         % Update weights
-        condition =  current_label*dot(theta, current_sample); % y_hat %!!!
-        if  (condition < 0) %!!!
-            error(epoch) = error(epoch) -1*condition; %!!!
-            change_vec = params.alpha*current_sample*current_label; %!!!
-            theta =  theta + change_vec; %+2*params.lambda*theta; %!!!
+        condition =  current_label*dot(theta, current_sample); % y_hat * current_label
+        if  (condition < 0) %
+            error(epoch) = error(epoch) -1*condition; %
+            change_vec = params.alpha*current_label*current_sample; %
+            theta =  theta +( change_vec + (params.lambda*2*(theta)));
         end
     end
-    error(epoch) = error(epoch) / num_samples;
-    % to find the best theta
+    error(epoch) = (error(epoch) +sum(theta.^2)) / num_samples;
+    % find the best theta
     if error(epoch) < best_error
       best_theta = theta;
       best_error = error(epoch);
