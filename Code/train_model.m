@@ -7,7 +7,8 @@ rng(params.seed)
 
 theta =  rand(1,num_features);
 best_theta = theta;
-best_error = inf;
+%best_error = inf;
+best_pres = inf;
 
 %% SGD with hinge-loss
 figure(1)
@@ -26,23 +27,24 @@ for epoch = 1:params.max_epoch
     for iter = 1:num_samples
         % Get current sample
         sample_index = epoch_order(iter);
-        current_sample =  data.X(iter, :); %
-        current_label =  data.Y(iter); %
+        current_sample =  data.X(iter, :);
+        current_label =  data.Y(iter);
         % Update weights
         condition =  current_label*dot(theta, current_sample); % y_hat * current_label
-        if  (condition < 0) %
-            error(epoch) = error(epoch) -1*condition; 
+        if  (condition < 0)
+            error(epoch) = error(epoch) -1*condition;
             change_vec = params.alpha*current_label*current_sample;
             theta = theta -2*params.alpha*params.lambda*theta + change_vec;
         end
     end
-    error(epoch) = (error(epoch) +sum(theta.^2)) / num_samples;
+    error(epoch) = (error(epoch) + params.lambda*sum(theta.^2)) / num_samples;
+    pres = evaluate_model(predict_y(data.X, theta), data.Y);
     % find the best theta
-    if error(epoch) < best_error
+    if pres < best_pres
       best_theta = theta;
-      best_error = error(epoch);
+      best_pres = pres;
     end
-    disp(best_error)
+    disp(pres)
     % Plot average error
     if epoch>params.convergence_window
         plot(epoch, mean(error(epoch-params.convergence_window:epoch)), '.', 'MarkerSize', 10)
