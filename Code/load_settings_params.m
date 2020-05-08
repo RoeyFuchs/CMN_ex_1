@@ -6,10 +6,10 @@ function [settings, params] = load_settings_params()
 
     %% MODEL PARAMETERS
     params.seed = 1;
-    params.alpha = 0.01;
+    params.alpha = 0.1;
     params.max_epoch = 500;
     params.convergence_window = 50;
     params.CV_k = 5;
-    params.lambda = 0.02;
+    params.lambda = 0.00;
 
 end

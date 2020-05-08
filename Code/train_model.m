@@ -7,8 +7,7 @@ rng(params.seed)
 
 theta =  rand(1,num_features);
 best_theta = theta;
-%best_error = inf;
-best_pres = inf;
+min_error = inf;
 
 %% SGD with hinge-loss
 figure(1)
@@ -16,7 +15,7 @@ clf; hold on
 xlabel('learning epoch'); ylabel('train error');
 error = [];
 for epoch = 1:params.max_epoch
-    fprintf('\nEpoch #%i: ', epoch)
+    % fprintf('\nEpoch #%i: ', epoch)
 
     % Arrange samples in random order for each learning epoch
     epoch_order = randperm(num_samples);
@@ -38,13 +37,11 @@ for epoch = 1:params.max_epoch
         end
     end
     error(epoch) = (error(epoch) + params.lambda*sum(theta.^2)) / num_samples;
-    pres = evaluate_model(predict_y(data.X, theta), data.Y);
     % find the best theta
-    if pres < best_pres
+    if error(epoch) < min_error
       best_theta = theta;
-      best_pres = pres;
+      min_error = error(epoch);
     end
-    disp(pres)
     % Plot average error
     if epoch>params.convergence_window
         plot(epoch, mean(error(epoch-params.convergence_window:epoch)), '.', 'MarkerSize', 10)
