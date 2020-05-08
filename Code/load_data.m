@@ -1,6 +1,6 @@
 function [data_train, data_test] = load_data(settings)
     rng(1)
-	data = importdata(settings.path2data);
+	  data = importdata(settings.path2data);
     mix_order = randperm(size(data,1));
     data = data(mix_order,:);
     test_size = 50;
