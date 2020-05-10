@@ -31,9 +31,9 @@ for epoch = 1:params.max_epoch
         current_sample =  data.X(iter, :);
         current_label =  data.Y(iter);
         % Update weights
-        condition =  current_label*dot(theta, current_sample); % y_hat * current_label
-        if  (condition < 0)
-            error(epoch) = error(epoch) -1*condition;
+        condition =  -current_label*dot(theta, current_sample); % -current_label * y_hat
+        if  (condition > 0)
+            error(epoch) = error(epoch) + condition;
             change_vec = params.alpha*current_label*current_sample;
             theta = theta -2*params.alpha*params.lambda*theta + change_vec;
         end

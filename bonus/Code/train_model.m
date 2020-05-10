@@ -16,6 +16,7 @@ figure(1)
 clf; hold on
 xlabel('learning epoch'); ylabel('train error');
 error = [];
+EPSILON = 10^-6; % to avoid log(0)
 for epoch = 1:params.max_epoch
     fprintf('\nEpoch #%i: ', epoch)
 
@@ -23,7 +24,6 @@ for epoch = 1:params.max_epoch
     epoch_order = randperm(num_samples);
     % Initialize the error
     error(epoch) = 0;
-    EPSILON = 10^-6;
     % we will use stochastic gradient descent to train our model
     for iter = 1:num_samples
         % Get current sample
@@ -31,11 +31,10 @@ for epoch = 1:params.max_epoch
         current_sample =  data.X(iter, :);
         current_label =  data.Y(iter);
         % Update weights
-        condition =  current_label*log2(EPSILON + sigmoid(dot(theta, current_sample))) + (1-current_label)*log2(EPSILON+1-sigmoid(dot(theta, current_sample)));
-        if  (condition < 0)
-            error(epoch) = error(epoch) -1*condition;
-            a = (sigmoid(dot(theta,current_sample))-current_label)*current_sample;
-            change_vec = params.alpha*a;
+        condition =  -(current_label*log2(EPSILON + sigmoid(dot(theta, current_sample))) + (1-current_label)*log2(EPSILON+1-sigmoid(dot(theta, current_sample))));
+        if  (condition > 0)
+            error(epoch) = error(epoch)+condition;
+            change_vec = params.alpha*(sigmoid(dot(theta,current_sample))-current_label)*current_sample; % (g(x)-y))x
             theta = theta -2*params.alpha*params.lambda*theta - change_vec;
         end
     end
